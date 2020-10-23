@@ -78,7 +78,7 @@ class Character:
 	@property
 	def strenght(self):
 		return self._strenght + self.modifier.permanent['strenght']
-	@strenght.setterstrenght
+	@strenght.setter
 	def strenght(self, value): self._strenght = value
 	
 	@property

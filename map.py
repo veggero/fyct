@@ -51,7 +51,7 @@ class Place:
 				(lambda obj: lambda char: char.inventory.pick(obj, char, self.contained))(obj),
 				condition=(lambda obj: lambda char: char.inventory.pick_message(obj))(obj)
 			) for obj in self.contained if isinstance(obj, Object) and not obj.visible] + \
-			[a for obj in self.contained for a in obj.ground_actions if isinstance(obj, Object)]
+			[a for obj in self.contained for a in getattr(obj, 'ground_actions', []) if isinstance(obj, Object)]
 	
 	@actions.setter
 	def actions(self, user_actions: List[Action]):
