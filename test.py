@@ -635,7 +635,7 @@ nicole = Character(
 world.spawn(veggero, world.places[0])
 world.spawn(nicole, world.places[0])
 
-Telegram('1381653310:AAHVMhUdQpJ4Rdb16TPh-_6Dhbp6OS2qX-w', world, {321076279: veggero})
+Telegram('508857997:AAGYf6PS09WSZ_mjlOlooj-YtIU4fPlYijs', world, {302001216: veggero})
 #302001216: veggero
 #186405135: nicole
 #1229891893: veggero2
