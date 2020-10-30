@@ -233,7 +233,6 @@ class Inventory:
 				return
 		if self.backpack:
 			self.backpack.objects.remove(obj)
-		assert 0, obj.description
 	
 	def drop(self, obj, player):
 		self.remove(obj)
