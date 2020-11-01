@@ -207,7 +207,7 @@ class Character:
 				if sound.strenght > 4 and char.state is States.Sleeping: char.wakeup()
 				if not char.state.can_see: continue
 				char.events.append(Format(sound.event.far, direction=around[self][-1].description))
-																														
+	
 	def send_visibility_event(self, event: EventMessages, before):
 		if not self.state.can_see: return
 		after = {c: c.place.objects_around(c.visibility) for c in Character.instances}

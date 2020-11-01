@@ -100,7 +100,7 @@ class World:
 		# of 2n times (2n is random)
 		for gen_number in range(2*n):
 			# Prepares templates
-			templates = choices(list(self.template_places), weights=[t["chances"] for t in self.template_places.values()], k=n)
+			templates = choices([*self.template_places], weights=[t["chances"] for t in self.template_places.values()], k=n)
 
 			# Saves each place generated
 			places_categories = Counter()
@@ -109,10 +109,13 @@ class World:
 				category = self.template_places[category_name].copy()
 				places_categories[category_name] += 1
 
-				# Choose a variant
+				# Chooses a variant
 				variants = list(category["variants"]) + ["classic"]
 				weights = [1] * len(variants) + [len(variants)]
 				variant = choices(variants + ["classic"], weights=weights, k=1)[0]
+
+				# Selects news descriptions, objects, attacks, actions and defences
+				# if a variant has been choosen
 				if variant != "classic":
 					category.update(category["variants"][variant])
 
@@ -169,7 +172,7 @@ class World:
 			return
 
 		# Raise an error if it couldn't generate the exits
-		raise ValueError("Couldn't create the map")
+		raise RuntimeError("Couldn't create the map")
 
 def checkMap(places):
 	todo = places.copy()
@@ -194,12 +197,12 @@ def checkMap(places):
 				pending.append(exit)
 
 	# Return True if the program has gone to all the places
-	return not bool(todo)
+	return not todo
 
 def joinPlaces(places, exits):
 	for exit in exits:
 		# Sets exit's direction
-		directions = list(filter(lambda p: p.tag == exit.tag, places))
+		directions = [p for p in places if p.tag == exit.tag]
 		if len(directions) < 1:
 			raise ValueError(f"No places with the #{tag} tag have ben found")
 		elif len(directions) > 1:

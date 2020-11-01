@@ -44,8 +44,8 @@ world = World(
 		"Canyon": {
 			"chances": 5,
 			"descriptions": [
-				"Un enorme canyon di terra rossa",
-				"Un piccolo canyon"
+				"in un enorme canyon di terra rossa",
+				"in un piccolo canyon"
 			],
 			"exits": {
 				"Grotta-outer": [
@@ -134,9 +134,9 @@ world = World(
 					"in un sentiero di montagna",
 					"verso un sentierino"
 				],
-				"Foresta-inner": [
-					"verso una distesa di alberi enorme",
-					"verso degli alberi fittissimi"
+				"Foresta-outer": [
+					"verso una distesa di alberi",
+					"verso degli alberi"
 				]
 			},
 			"variants": {}
@@ -145,8 +145,8 @@ world = World(
 		"Grotta-inner": {
 			"chances": 5,
 			"descriptions": [
-				"Una grotta enorme, ma molto buia",
-				"Una piccola grotta di cui si vedono bene le uscite"
+				"in una grotta enorme, ma molto buia",
+				"in una piccola grotta di cui si vedono bene le uscite"
 			],
 			"exits": {
 				"Grotta-outer": [
@@ -154,8 +154,8 @@ world = World(
 					"verso la luce"
 				],
 				"Grotta-inner": [
-					"verso il tunnel a destra",
-					"verso il tunnel a sinistra"
+					"verso un tunnel più buio",
+					"verso un tunnel più stretto"
 				]
 			},
 			"variants": {
@@ -174,8 +174,8 @@ world = World(
 		"Montagna-outer": {
 			"chances": 5,
 			"descriptions": [
-				"Un sentiero di montagna",
-				"Un piccolo sentierino, attraversato da molti animali"
+				"in un sentiero di montagna",
+				"in un piccolo sentierino che prosegue per una montagna"
 			],
 			"exits": {
 				"Grotta-outer": [
@@ -205,8 +205,8 @@ world = World(
 		"Montagna-inner": {
 			"chances": 5,
 			"descriptions": [
-				"La cima di una montagna perennemente innevata",
-				"La cima della montagna, da cui si vede il mare"
+				"sulla cima di una montagna perennemente innevata",
+				"sulla cima della montagna da cui si vede il mare"
 			],
 			"exits": {
 				"Montagna-outer": [
@@ -221,16 +221,16 @@ world = World(
 			"chances": 5,
 			"descriptions": [
 				"La riva di un lago enorme",
-				"La riva di un lago pieno di oche"
+				"La riva di un laghetto pieno di oche"
 			],
 			"exits": {
 				"Montagna-outer": [
 					"in un sentiero di montagna",
-					"verso un sentiero"
+					"verso un sentiero sterrato che sale"
 				],
 				"Lago-inner": [
 					"in un sentiero che passa attraverso il lago",
-					"in un sentiero"
+					"in un sentiero che taglia il lago"
 				],
 				"Foresta-outer": [
 					"verso degli alberi",
@@ -243,13 +243,13 @@ world = World(
 		"Lago-inner": {
 			"chances": 5,
 			"descriptions": [
-				"Un sentierino che taglia a metà il lago",
-				"Una stradina sul bordo del lago"
+				"in un sentierino che divide in due parti il lago",
+				"in una stradina sul bordo del lago"
 			],
 			"exits": {
 				"Lago-outer": [
 					"verso la riva del lago",
-					"alla fine del sentiero"
+					"verso la fine del sentiero"
 				]
 			},
 			"variants": {
@@ -456,8 +456,8 @@ world = World(
 		"Foresta-outer": {
 			"chances": 5,
 			"descriptions": [
-				"Un percorso circondato da alberi. Sembra l'entrata di una foresta",
-				"Un sentiero che sembra finire in una foresta"
+				"in un percorso circondato da alberi che sembra l'entrata di una foresta",
+				"in un sentiero che sembra finire in una foresta"
 			],
 			"exits": {
 				"Canyon": [
@@ -471,7 +471,11 @@ world = World(
 				"Foresta-inner": [
 					"al centro della foresta",
 					"in una parte di foresta ancora più fitta"
-				]
+				],
+				"Grotta-outer": [
+					"verso una grotta",
+					"verso quella che sembra una miniera abbandonata"
+				],
 			},
 			"variants": {}
 		},
@@ -479,14 +483,10 @@ world = World(
 		"Foresta-inner": {
 			"chances": 5,
 			"descriptions": [
-				"Una foresta fittissima",
-				"Una foresta che sembra aver ospitato un'antica civiltà"
+				"in una foresta fittissima",
+				"in una foresta che sembra aver ospitato un'antica civiltà"
 			],
 			"exits": {
-				"Grotta-outer": [
-					"verso una grotta",
-					"verso quella che sembra una miniera abbandonata"
-				],
 				"Foresta-inner": [
 					"dove gli alberi sembrano meno fitti",
 					"dove la foresta sembra diradarsi"
@@ -524,8 +524,8 @@ world = World(
 		"Monastero-outer": {
 			"chances": 5,
 			"descriptions": [
-				"L'entrata di un antico monastero",
-				"Una porta di quello che sembra un monastero abbandonato"
+				"all'entrata di un antico monastero",
+				"davanti alla porta di un monastero abbandonato"
 			],
 			"exits": {
 				"Montagna-outer": [
@@ -547,8 +547,8 @@ world = World(
 		"Monastero-inner-1": {
 			"chances": 5,
 			"descriptions": [
-				"Il piano terra del monastero. Non sembra esserci nessuno",
-				"Un atrio con due rampe di scale"
+				"al piano terra del monastero",
+				"davanti un atrio con due rampe di scale"
 			],
 			"exits": {
 				"Monastero-outer": [
@@ -566,13 +566,13 @@ world = World(
 		"Monastero-inner-2": {
 			"chances": 5,
 			"descriptions": [
-				"Il primo piano del monastero. Si vedono dei letti",
-				"Probabilmente la vecchia mensa del monastero"
+				"al primo piano del monastero",
+				"al piano di mezzo del monastero"
 			],
 			"exits": {
 				"Monastero-inner-1": [
-					"da dove sei arrivato",
-					"verso le scale che tornano giù"
+					"verso le scale che scendono",
+					"verso le scale che vanno giù"
 				],
 				"Monastero-inner-3": [
 					"verso il piano superiore",
@@ -610,18 +610,19 @@ world = World(
 		"Monastero-inner-3": {
 			"chances": 1,
 			"descriptions": [
-				"L'ultimo piano del monastero. C'è un balcone, ma è sbarrato",
-				"Il terzo piano. Ci sono dei quadri rovinati appesi alle pareti"
+				"all'ultimo piano del monastero",
+				"al terzo piano del monastero"
 			],
 			"exits": {
 				"Monastero-inner-2": [
-					"da dove sei venuto, non c'è nessun altra porta."
+					"verso il piano di sotto",
+					"verso il piano inferiore"
 				]
 			},
 			"variants": {}
 		}
 	},
-	world_size=10
+	world_size=50
 )
 
 veggero = Character(
