@@ -7,24 +7,22 @@ from containers import ObjectGroup
 
 from typing import Set, Dict, Tuple
 from dataclasses import dataclass, field
-from collections import defaultdict
 from copy import copy
 
 @dataclass
 class Place:
 	
+	tag: str
 	description: str
+	category: str
+	variant: str
 	exits: Set[Exit]
-	tags: Set[str]
 	height: int = 0
 	soundproof: int = 0
 	contained: ObjectGroup = field(default_factory=ObjectGroup)
 	actions: List[Action] = field(default_factory=list)
 	attacks: List[Attack] = field(default_factory=list)
 	defenses: List[Defense] = field(default_factory=list)
-	
-	def __post_init__(self):
-		for exit in self.exits: exit.parent = self
 	
 	@property
 	def objects_description(self) -> str:
@@ -76,8 +74,8 @@ class Place:
 		around.update({obj: () for obj in (self.contained.all if all else self.contained)})
 		return around"""
 	
-	def get_exit(self, tags):
-		return next(exit for exit in self.exits if exit.tags == tags)
+	def get_exit(self, tag):
+		return next(exit for exit in self.exits if exit.tag == tag)
 	
 	def deltaObject(self, before, after, obj) -> Dict[str, List[Tuple[Object, Exit]]]:
 		if obj in before and obj not in after:
@@ -104,7 +102,7 @@ class Place:
 class Exit:
 	
 	description: str
-	tags: Set[str]
+	tag: str
 	distance: int = 5
 	
 	direction: Optional[Place] = None
