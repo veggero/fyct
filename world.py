@@ -147,10 +147,18 @@ class World:
 					continue
 				elif any([e.tag == b.tag for e in a.exits]):
 					continue
+				elif len(a.exits) >= 4 or len(b.exits) >= 4:
+					continue
+
+				# Removes duplicated exits
+				a_to_b = list(filter(lambda d: not any([d == e.description for e in a.exits]), self.template_places[a.category]["exits"][b.category]))
+				b_to_a = list(filter(lambda d: not any([d == e.description for e in b.exits]), self.template_places[b.category]["exits"][a.category]))
+				if not all([a_to_b, b_to_a]):
+					continue
 
 				# Creates the exits
-				a.exits.add(Exit(tag=b.tag, description=choice(self.template_places[a.category]["exits"][b.category])))
-				b.exits.add(Exit(tag=a.tag, description=choice(self.template_places[b.category]["exits"][a.category])))
+				a.exits.add(Exit(tag=b.tag, description=choice(a_to_b)))
+				b.exits.add(Exit(tag=a.tag, description=choice(b_to_a)))
 
 				# Immediatly exits the loop if all the places have at least one exit
 				if all(p.exits for p in places):
