@@ -9,7 +9,7 @@ from core import Modifier, Attack, Defense, Dodge, Action
 from things import Object, Food, HealWound
 from life import Wounds, States
 from containers import ObjectGroup, Backpack, Weapon
-from words import EventMessages, Description, Format
+from words import EventMessages, Description, Format, ExitDescription
 from map import Place, Exit
 
 
@@ -49,12 +49,12 @@ world = World(
 			],
 			"exits": {
 				"Grotta-outer": [
-					"in un buco nella roccia",
-					"in una fessura"
+					ExitDescription("verso ", "da ", "un buco nella roccia"),
+					ExitDescription("verso ", "da ", "in una fessura")
 				],
 				"Foresta-outer": [
-					"verso degli alberi",
-					"verso la vegetazione"
+					ExitDescription("verso ", "da ", "degli alberi"),
+					ExitDescription("verso ", "dal", "la vegetazione")
 				]
 			},
 			"variants": {
@@ -123,20 +123,20 @@ world = World(
 			],
 			"exits": {
 				"Canyon": [
-					"verso delle rocce enormi",
-					"verso della terra rossa"
+					ExitDescription("verso ", "da ", "delle rocce enormi"),
+					ExitDescription("verso ", "da ", "della terra rossa")
 				],
 				"Grotta-inner": [
-					"dentro alla grotta",
-					"all'interno della grotta"
+					ExitDescription("verso ", "dal", "la grotta"),
+					ExitDescription("verso ", "dal", "l'interno della grotta")
 				],
 				"Montagna-outer": [
-					"in un sentiero di montagna",
-					"verso un sentierino"
+					ExitDescription("verso ", "da ", "un sentiero di montagna"),
+					ExitDescription("verso ", "da ", "un sentierino")
 				],
 				"Foresta-outer": [
-					"verso una distesa di alberi",
-					"verso degli alberi"
+					ExitDescription("verso ", "da ", "una distesa di alberi"),
+					ExitDescription("verso ", "da ", "degli alberi")
 				]
 			},
 			"variants": {}
@@ -150,12 +150,12 @@ world = World(
 			],
 			"exits": {
 				"Grotta-outer": [
-					"verso un uscita",
-					"verso la luce"
+					ExitDescription("verso ", "da ", "un uscita"),
+					ExitDescription("verso ", "dal", "la luce")
 				],
 				"Grotta-inner": [
-					"verso un tunnel più buio",
-					"verso un tunnel più stretto"
+					ExitDescription("verso ", "da ", "un tunnel più buio"),
+					ExitDescription("verso ", "da ", "un tunnel più stretto")
 				]
 			},
 			"variants": {
@@ -179,20 +179,20 @@ world = World(
 			],
 			"exits": {
 				"Grotta-outer": [
-					"verso l'entrata di una grotta",
-					"in quella che sembra essere una grotta"
+					ExitDescription("verso ", "dal", "l'entrata di una grotta"),
+					ExitDescription("verso ", "da ", "quella che sembra essere una grotta")
 				],
 				"Montagna-inner": [
-					"verso la strada del sentiero",
-					"verso la cima"
+					ExitDescription("verso ", "dal", "la strada del sentiero"),
+					ExitDescription("verso ", "dal", "la cima")
 				],
 				"Lago-outer": [
-					"verso la riva di un lago",
-					"verso uno specchio di luce"
+					ExitDescription("verso ", "dal", "la riva di un lago"),
+					ExitDescription("verso ", "da ", "uno specchio di luce")
 				],
 				"Monastero-outer": [
-					"all'entrata di un monastero",
-					"alla porta di uno strano edificio"
+					ExitDescription("", "d", "all'entrata di un monastero"),
+					ExitDescription("", "d", "alla porta di uno strano edificio")
 				]
 			},
 			"variants": {
@@ -210,8 +210,8 @@ world = World(
 			],
 			"exits": {
 				"Montagna-outer": [
-					"verso un sentiero di montagna",
-					"in un altro sentiero"
+					ExitDescription("verso ", "da ", "un sentiero di montagna"),
+					ExitDescription("in ", "da ", "un altro sentiero")
 				]
 			},
 			"variants": {}
@@ -225,16 +225,16 @@ world = World(
 			],
 			"exits": {
 				"Montagna-outer": [
-					"in un sentiero di montagna",
-					"verso un sentiero sterrato che sale"
+					ExitDescription("in ", "da ", "un sentiero di montagna"),
+					ExitDescription("verso ", "da ", "un sentiero sterrato che sale")
 				],
 				"Lago-inner": [
-					"in un sentiero che passa attraverso il lago",
-					"in un sentiero che taglia il lago"
+					ExitDescription("in ", "da ", "un sentiero che passa attraverso il lago"),
+					ExitDescription("in ", "da ", "un sentiero che taglia il lago")
 				],
 				"Foresta-outer": [
-					"verso degli alberi",
-					"verso un'immensa distesa di alberi"
+					ExitDescription("verso ", "da ", "degli alberi"),
+					ExitDescription("verso ", "da ", "un'immensa distesa di alberi")
 				]
 			},
 			"variants": {}
@@ -248,8 +248,8 @@ world = World(
 			],
 			"exits": {
 				"Lago-outer": [
-					"verso la riva del lago",
-					"verso la fine del sentiero"
+					ExitDescription("verso ", "dal", "la riva del lago"),
+					ExitDescription("verso ", "dal", "la fine del sentiero")
 				]
 			},
 			"variants": {
@@ -461,20 +461,20 @@ world = World(
 			],
 			"exits": {
 				"Canyon": [
-					"verso le rocce di un canyon",
-					"verso un canyon di terra rossa"
+					ExitDescription("verso ", "dal", "le rocce di un canyon"),
+					ExitDescription("verso ", "da ", "un canyon di terra rossa")
 				],
 				"Lago-outer": [
-					"verso la riva di un lago lucente",
-					"verso uno specchio d'acqua"
+					ExitDescription("verso ", "dal", "la riva di un lago lucente"),
+					ExitDescription("verso ", "da ", "uno specchio d'acqua")
 				],
 				"Foresta-inner": [
-					"al centro della foresta",
-					"in una parte di foresta ancora più fitta"
+					ExitDescription("verso i", "da", "l centro della foresta"),
+					ExitDescription("in ", "da ", "una parte di foresta ancora più fitta")
 				],
 				"Grotta-outer": [
-					"verso una grotta",
-					"verso quella che sembra una miniera abbandonata"
+					ExitDescription("verso ", "da ", "una grotta"),
+					ExitDescription("verso ", "da ", "quella che sembra una miniera abbandonata")
 				],
 			},
 			"variants": {}
@@ -488,16 +488,16 @@ world = World(
 			],
 			"exits": {
 				"Foresta-inner": [
-					"dove gli alberi sembrano meno fitti",
-					"dove la foresta sembra diradarsi"
+					ExitDescription("", "da ", "dove gli alberi sembrano meno fitti"),
+					ExitDescription("", "da ", "dove la foresta sembra diradarsi")
 				],
 				"Monastero-outer": [
-					"all'entrata di un monastero abbandonato",
-					"davanti alla porta di un palazzo antico"
+					ExitDescription("", "d", "all'entrata di un monastero abbandonato"),
+					ExitDescription("davanti ", "d", "alla porta di un palazzo antico")
 				],
 				"Foresta-outer": [
-					"verso dove gli alberi sembrano diradarsi",
-					"verso un sentierino"
+					ExitDescription("verso ", "da ", "dove gli alberi sembrano diradarsi"),
+					ExitDescription("verso ", "da ", "un sentierino")
 				]
 			},
 			"variants": {
@@ -529,16 +529,16 @@ world = World(
 			],
 			"exits": {
 				"Montagna-outer": [
-					"verso il sentiero da cui sei arrivato",
-					"al sentiero di prima"
+					ExitDescription("verso ", "da ", "un sentierino"),
+					ExitDescription("verso ", "da ", "un sentiero di montagna")
 				],
 				"Foresta-inner": [
-					"verso la foresta",
-					"alla foresta"
+					ExitDescription("verso ", "dal", "la foresta"),
+					ExitDescription("verso ", "dal", "la foresta")
 				],
 				"Monastero-inner-1": [
-					"dentro il monastero",
-					"all'interno del palazzo"
+					ExitDescription("dentro i", "da", "l monastero"),
+					ExitDescription("", "d ", "all'interno del palazzo")
 				]
 			},
 			"variants": {}
@@ -552,12 +552,12 @@ world = World(
 			],
 			"exits": {
 				"Monastero-outer": [
-					"all'aperto",
-					"all'esterno del monastero"
+					ExitDescription("all'aperto ", "dal giardino", ""),
+					ExitDescription("verso ", "dal", "l'esterno del monastero")
 				],
 				"Monastero-inner-2": [
-					"verso il piano di sopra",
-					"di sopra"
+					ExitDescription("verso i", "da", "l piano di sopra"),
+					ExitDescription("verso ", "da ", "di sopra")
 				]
 			},
 			"variants": {}
@@ -571,12 +571,12 @@ world = World(
 			],
 			"exits": {
 				"Monastero-inner-1": [
-					"verso le scale che scendono",
-					"verso le scale che vanno giù"
+					ExitDescription("verso ", "dal", "le scale che scendono"),
+					ExitDescription("verso ", "dal", "le scale che vanno giù")
 				],
 				"Monastero-inner-3": [
-					"verso il piano superiore",
-					"di sopra"
+					ExitDescription("verso i", "da", "l piano superiore"),
+					ExitDescription("verso ", "da ", "di sopra")
 				]
 			},
 			"variants": {
@@ -615,8 +615,8 @@ world = World(
 			],
 			"exits": {
 				"Monastero-inner-2": [
-					"verso il piano di sotto",
-					"verso il piano inferiore"
+					ExitDescription("verso i", "da", "l piano di sotto"),
+					ExitDescription("verso i", "da", "l piano inferiore"),
 				]
 			},
 			"variants": {}
