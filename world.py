@@ -97,8 +97,8 @@ class World:
 	
 	def generate_map(self, n):
 		# Tries to generate the map for a maximum
-		# of 2n times (2n is random)
-		for gen_number in range(2*n):
+		# of 2n times (3n is random)
+		for gen_number in range(3*n):
 			# Prepares templates
 			templates = choices([*self.template_places], weights=[t["chances"] for t in self.template_places.values()], k=n)
 
@@ -146,6 +146,8 @@ class World:
 				elif not a.category in self.template_places[b.category]["exits"]:
 					continue
 				elif any([e.tag.startswith(a.category) for e in b.exits]):
+					continue
+				elif any([e.tag.startswith(b.category) for e in a.exits]):
 					continue
 				elif any([e.tag == b.tag for e in a.exits]):
 					continue
