@@ -2,14 +2,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Set, Optional
-from random import choice, shuffle, random
-from copy import deepcopy, copy
-from time import sleep
-from collections import defaultdict
+from random import choice, shuffle, random, choices
+from collections import Counter
+from copy import copy
+from itertools import combinations
 
 from characters import Character
+from map import Place, Exit
 from gram import Telegram
-from words import EventMessages
+from words import EventMessages, ExitDescription
 
 @dataclass
 class World:
@@ -20,6 +21,7 @@ class World:
 	template_places: Set[Place]
 	time: int = 0
 	places: Set[Place] = field(default_factory=set)
+	world_size: int = 10
 	
 	changeWeatherChance = 1 / 14400
 	duringWeatherChance = 1 / 1200
@@ -32,7 +34,7 @@ class World:
 	def __post_init__(self):
 		self.weather = choice([*self.weathers])
 		self.day_time = choice([*self.day_times])
-		self.generate_map()
+		self.generate_map(self.world_size)
 	
 	@property
 	def hour(self) -> int: return (self.time % 60*24) / 60
@@ -93,82 +95,146 @@ class World:
 		character.place = place
 		character.world = self
 	
-	def generate_map(self):
-		places_done, exits_pending, current_templates, trash = [], [], [*self.template_places]*2, []
-		grade = {1: 0, 2: 0, 3: 0, 4: 0}
-		
-		# We gotta start somewhere
-		start = deepcopy(max(self.template_places, key=lambda x: len(x.exits)))
-		places_done.append(start)
-		exits_pending.extend(start.exits)
-		
-		while exits_pending and (len(places_done) <= self.maxSize or len(exits_pending) % 2):
-			
-			shuffle(exits_pending)
-			new, newExit = None, None
-			oldExit, *exits_pending = exits_pending
-			
-			all_places = [*self.template_places]
-			shuffle(current_templates)
-			shuffle(all_places)
-			
-			if len(current_templates) < len(all_places):
-				current_templates.append(pick := choice(trash))
-				trash.remove(pick)
-			
-			# Perfect fit in current_templates?
-			current_templates = sorted(current_templates, key=lambda t: -len(t.tags & oldExit.tags))
-			new = deepcopy(choosen := next((t for t in current_templates if len(t.tags & oldExit.tags) +
-				max(len(e.tags & oldExit.parent.tags) for e in t.exits) >= 2), None))
-			if new:
-				current_templates.remove(choosen)
-				trash.append(choosen)
-				grade[1] += 1
-			
-			# Otherwise, perfect fit in past ones?
-			if not new:
-				for possibleExit in exits_pending:
-					if possibleExit.parent.tags == oldExit.tags and oldExit.parent.tags == possibleExit.tags:
-						newExit = possibleExit
-						grade[2] += 1
-						break
-			
-			# Perfect fit in all templates?
-			if not new and not newExit:
-				new = deepcopy(next((t for t in all_places if t.tags == oldExit.tags), None))
-				grade[3] += 1
-			
-			# UN-Perfect fit if EVERYTHING ELSE FUCKING FAILED
-			if not new and not newExit:
-				new = deepcopy(sorted(all_places, key=lambda t: (len(t.tags & oldExit.tags), len(t.exits), len(t.tags)))[0])
-				grade[4] += 1
-			
-			if new:
-				newExit, *nexExits = sorted(new.exits, key=lambda x: -len(x.tags & oldExit.parent.tags))
-				newExit.direction, oldExit.direction = oldExit.parent, newExit.parent
-				newExit.inverse, oldExit.inverse = oldExit, newExit
-				exits_pending.extend(nexExits)
-				places_done.append(new)
-			elif newExit:
-				newExit.direction, oldExit.direction = oldExit.parent, newExit.parent
-				newExit.inverse, oldExit.inverse = oldExit, newExit
-				exits_pending.remove(newExit)
-			else:
-				assert False
-		
-		while exits_pending:
-			newExit, oldExit = exits_pending.pop(), exits_pending.pop()
-			newExit.direction, oldExit.direction = oldExit.parent, newExit.parent
-			newExit.inverse, oldExit.inverse = oldExit, newExit
-		
-		self.places = places_done
-		
-		# MAP VALUTATION
-		all_tags = [tag for place in self.places for tag in place.tags]
-		count_tags = {tag: all_tags.count(tag) for tag in set(all_tags)}
-		print(len(self.places), self.maxSize)
-		print(grade)
-		print(dict(sorted(count_tags.items(), key=lambda a: a[1], reverse=True)))
+	def generate_map(self, n):
+		# Tries to generate the map for a maximum
+		# of 2n times (3n is random)
+		for gen_number in range(3*n):
+			# Prepares templates
+			templates = choices([*self.template_places], weights=[t["chances"] for t in self.template_places.values()], k=n)
+
+			# Saves each place generated
+			places_categories = Counter()
+			places = []
+			for category_name in templates:
+				category = self.template_places[category_name].copy()
+				places_categories[category_name] += 1
+
+				# Chooses a variant
+				variants = list(category["variants"]) + ["classic"]
+				weights = [1] * len(variants) + [len(variants)]
+				variant = choices(variants + ["classic"], weights=weights, k=1)[0]
+
+				# Selects news descriptions, objects, attacks, actions and defences
+				# if a variant has been choosen
+				if variant != "classic":
+					category.update(category["variants"][variant])
+
+				# Creates the place
+				place = Place(tag=f"{category_name} #{places_categories[category_name]}",
+						category=category_name,
+						variant=variant,
+						description=choice(category["descriptions"]),
+						exits=set())
+
+				# Adds contained, actions, attacks and defences if there are any
+				for field in ("contained", "actions", "attacks", "defences"):
+					if value := category.get(field):
+						place.__setattr__(field, value)
+
+				# Saves the place
+				places.append(place)
+
+			# Creates random commbinations between places
+			exits = list(combinations(places, 2))
+			shuffle(exits)
+
+			# Trashes the invalid ones
+			for a, b in exits:
+				# Ensures that the two categories are compatible
+				if not b.category in self.template_places[a.category]["exits"]:
+					continue
+				elif not a.category in self.template_places[b.category]["exits"]:
+					continue
+				elif any([e.tag.startswith(a.category) for e in b.exits]):
+					continue
+				elif any([e.tag.startswith(b.category) for e in a.exits]):
+					continue
+				elif any([e.tag == b.tag for e in a.exits]):
+					continue
+				elif len(a.exits) >= 4 or len(b.exits) >= 4:
+					continue
+
+				# Creates the exits
+				a.exits.add(Exit(tag=b.tag, description=choice(self.template_places[a.category]["exits"][b.category])))
+				b.exits.add(Exit(tag=a.tag, description=choice(self.template_places[b.category]["exits"][a.category])))
+
+				# Immediatly exits the loop if all the places have at least one exit
+				if all(p.exits for p in places):
+					break
+
+			# Return to the beginning if it couldn't create enough exits
+			if not all(p.exits for p in places):
+				continue
+
+			# Links exits and places
+			joinPlaces(places, [e for p in places for e in p.exits])
+
+			# Ensures all the places are linked
+			if not checkMap(places):
+				continue
+
+			# Saves the new places
+			self.places = places
+			return
+
+		# Raise an error if it couldn't generate the exits
+		raise RuntimeError("Couldn't create the map")
+
+def checkMap(places):
+	todo = places.copy()
+	pending = []
+
+	# Picks the starting place
+	start = todo.pop()
+	
+	# Sets its neighbors as pending
+	pending.extend([e.direction for e in start.exits])
+
+	# While there are pending places
+	while pending:
+		# Removes them from the list
+		place = pending.pop()
+		if place in todo:
+			todo.remove(place)
+
+		# Marks as pending its neighbors
+		for exit in [e.direction for e in place.exits]:
+			if exit in todo:
+				pending.append(exit)
+
+	# Return True if the program has gone to all the places
+	return not todo
+
+def joinPlaces(places, exits):
+	for exit in exits:
+		# Sets exit's direction
+		directions = [p for p in places if p.tag == exit.tag]
+		if len(directions) < 1:
+			raise ValueError(f"No places with the #{tag} tag have ben found")
+		elif len(directions) > 1:
+			raise ValueError(f"Too many places with the #{tag} tag have been found")
+		else:
+			exit.direction = directions[0]
+
+		# Sets exit's parent
+		parents = list(filter(lambda p: exit in p.exits, places))
+		if len(parents) < 1:
+			raise ValueError(f"No places have an exit to #{tag}")
+		elif len(parents) > 1:
+			raise ValueError(f"Too many places have an exit to #{tag}")
+		else:
+			exit.parent = parents[0]
+
+	# Ensures that all the exits have an inverse
+	for exit in exits:
+		inverses = list(filter(lambda e: [e.direction, e.parent] == [exit.parent, exit.direction], exits))
+		if len(inverses) < 1:
+			raise ValueError(f"The exit from #{exit.parent} to #{exit.direction} has no reverse")
+		elif len(inverses) > 1:
+			raise ValueError(f"The exit from #{exit.direction} to #{exit.parent} is duplicated")
+		else:
+			exit.inverse = inverses[0]
+
 
 @dataclass(eq=True, frozen=True)
 class Weather:

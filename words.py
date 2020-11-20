@@ -161,3 +161,19 @@ class Events(list):
 	
 	def __str__(self):
 		return Format.join([*map(str, self)]).capitalize()
+
+@dataclass
+class ExitDescription:
+	going_to: str
+	coming_from: str
+	description: str
+
+	def __str__(self):
+		return self.going_to + self.description
+
+	@property
+	def inverse(self):
+		return self.coming_from + self.description
+
+	def __hash__(self):
+		return hash(str(self))
